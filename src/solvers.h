@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <memory>
 #include <functional>
+#include <vector>
 
 using Solver = std::function<void(float *, float *, float *, int)>;
 
@@ -13,6 +14,8 @@ public:
     Solvers() = delete;
 
     static void register_solver(const std::string &name, Solver solver) noexcept;
+
+    static const std::unordered_map<std::string, Solver> &get_solvers() { return solvers(); }
 
 private:
     static std::unordered_map<std::string, Solver> &solvers();

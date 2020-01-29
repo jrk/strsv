@@ -5,7 +5,7 @@
 void Solvers::register_solver(const std::string &name, Solver solver) noexcept {
     try {
         solvers().emplace(name, std::move(solver));
-    } catch (...) { /* just ignore the solver */ }
+    } catch (...) { /* just ignore the exception */ }
 }
 
 std::unordered_map<std::string, Solver> &Solvers::solvers() {
