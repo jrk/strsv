@@ -11,18 +11,23 @@ bool relatively_close(const std::vector<float> &correct, const std::vector<float
         x_y += diff * diff;
         y += correct[i] * correct[i];
     }
-    return sqrtf(x_y / y) < 10 * FLT_EPSILON;
+    return sqrtf(x_y / y) < 3.0f * n * FLT_EPSILON;
 }
 
 TEST(SolverTest, AllValuesClose) {
-    auto lte = LowerTriangularEquation::CreateRandom(8);
+    auto lte = LowerTriangularEquation::CreateRandom(468);
 
     blas_solver(lte);
     auto correct_x = lte.x; // copies!
 
     for (const auto &s : Solvers::get_solvers()) {
+        // reset x
         std::fill(lte.x.begin(), lte.x.end(), 0.0f);
+
+        // call the solver
         s.second(lte);
+
+        // check correctness
         ASSERT_PRED2(relatively_close, correct_x, lte.x);
     }
 }
