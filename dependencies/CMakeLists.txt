@@ -13,7 +13,7 @@ FetchContent_MakeAvailable(
         googletest
         googlebenchmark)
 
-## Project that are likely available locally / have find modules
+## Projects that are likely available locally / have find modules
 set(BLAS_TARGETS "")
 foreach (BLA_VENDOR IN ITEMS OpenBLAS ATLAS Intel10_64lp_seq Apple Generic)
     find_package(BLAS QUIET)
