@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.14)
+
 ## External projects that need to be fetched
 include(FetchContent)
 
@@ -8,6 +10,11 @@ FetchContent_Declare(googletest
 FetchContent_Declare(googlebenchmark
         GIT_REPOSITORY https://github.com/google/benchmark.git
         GIT_TAG master) # need master for benchmark::benchmark
+
+# Hack around googlebenchmark's old CMake policy set by creating an option here instead of simply set()-ing.
+# This prevents googlebenchmark from injecting its own tests into the build.
+# See CMP0077.
+option(BENCHMARK_ENABLE_TESTING "Enable testing of the benchmark library." OFF)
 
 FetchContent_MakeAvailable(
         googletest
