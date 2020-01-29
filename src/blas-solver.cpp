@@ -1,9 +1,8 @@
-#include <cstring>
 #include "cblas.h"
 #include "solvers.h"
 
 void blas_solver(float *L, float *x, float *b, int n) {
-    memcpy(x, b, sizeof(*x) * n);
+    std::copy(b, b + n, x);
     cblas_strsv(CblasColMajor,
                 CblasLower,
                 CblasNoTrans,
