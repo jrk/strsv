@@ -6,7 +6,10 @@
 struct LowerTriangularEquation {
     explicit LowerTriangularEquation(size_t n);
 
+    LowerTriangularEquation(const LowerTriangularEquation &) = default;
+
     static LowerTriangularEquation CreateRandom(size_t n);
+    void dump() const;
 
     int n;
     std::vector<float> L;

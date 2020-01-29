@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <random>
+#include <cstdio>
 
 namespace {
     float rand_float() {
@@ -29,4 +30,25 @@ LowerTriangularEquation LowerTriangularEquation::CreateRandom(size_t n) {
     }
 
     return eq;
+}
+
+void LowerTriangularEquation::dump() const {
+    printf("L = \n");
+    for (int i = 0; i < n; ++i) {
+        printf("\t");
+        for (int j = 0; j < n; ++j) {
+            printf("%1.02f ", L[i + j * n]);
+        }
+        printf("\n");
+    }
+
+    printf("\nb = \n");
+    for (int i = 0; i < n; ++i) {
+        printf("\t%1.02f\n", b[i]);
+    }
+
+    printf("\nx = \n");
+    for (int i = 0; i < n; ++i) {
+        printf("\t%1.02f\n", x[i]);
+    }
 }
