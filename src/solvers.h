@@ -10,6 +10,7 @@
 #include "LowerTriangularEquation.h"
 
 using Solver = std::function<void(LowerTriangularEquation&)>;
+void blas_solver(LowerTriangularEquation &eq);
 
 class Solvers {
 public:
