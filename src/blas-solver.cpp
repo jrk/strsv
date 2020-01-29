@@ -1,13 +1,13 @@
 #include "cblas.h"
 #include "solvers.h"
 
-void blas_solver(float *L, float *x, float *b, int n) {
-    std::copy(b, b + n, x);
+void blas_solver(LowerTriangularEquation &eq) {
+    std::copy(eq.b.begin(), eq.b.end(), eq.x.begin());
     cblas_strsv(CblasColMajor,
                 CblasLower,
                 CblasNoTrans,
                 CblasUnit,
-                n, L, n, x,
+                eq.n, eq.L.data(), eq.n, eq.x.data(),
                 1);
 }
 

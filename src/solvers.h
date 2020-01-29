@@ -7,7 +7,9 @@
 #include <functional>
 #include <vector>
 
-using Solver = std::function<void(float *, float *, float *, int)>;
+#include "LowerTriangularEquation.h"
+
+using Solver = std::function<void(LowerTriangularEquation&)>;
 
 class Solvers {
 public:
