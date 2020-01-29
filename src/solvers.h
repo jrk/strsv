@@ -15,7 +15,7 @@ public:
     static void register_solver(const std::string &name, Solver solver) noexcept;
 
 private:
-    static std::unordered_map<std::string, Solver> solvers;
+    static std::unordered_map<std::string, Solver> &solvers();
 };
 
 #define REGISTER_SOLVER(x) \
