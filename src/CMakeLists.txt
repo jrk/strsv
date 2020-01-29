@@ -1,5 +1,7 @@
-add_library(solvers SHARED)
+add_library(solvers SHARED
+        blas-solver.cpp
+        solvers.cpp
+        solvers.h)
 
-target_sources(solvers
-        PRIVATE
-        solvers.cpp)
+target_link_libraries(solvers
+        PRIVATE BLAS::OpenBLAS)
