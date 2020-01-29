@@ -1,5 +1,6 @@
 add_library(solvers SHARED
         blas-solver.cpp
+        naive-solver.cpp
         solvers.cpp
         solvers.h
         LowerTriangularEquation.cpp
