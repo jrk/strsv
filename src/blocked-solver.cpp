@@ -9,8 +9,7 @@ void blocked_solver(LowerTriangularEquation &eq) {
 
     std::memset(eq.x.data(), 0, n * sizeof(float));
 
-    for (int block = 0; block < n / 4; ++block) {
-        int bkLowJ = 4 * block;
+    for (int bkLowJ = 0; bkLowJ < n; bkLowJ += 4) {
 
         int trLowI = bkLowJ;
         for (int j = 0; j < 4; ++j) {
@@ -26,8 +25,7 @@ void blocked_solver(LowerTriangularEquation &eq) {
         v4sf x_j1 = {eq.x[bkLowJ + 1], eq.x[bkLowJ + 1], eq.x[bkLowJ + 1], eq.x[bkLowJ + 1]};
         v4sf x_j2 = {eq.x[bkLowJ + 2], eq.x[bkLowJ + 2], eq.x[bkLowJ + 2], eq.x[bkLowJ + 2]};
         v4sf x_j3 = {eq.x[bkLowJ + 3], eq.x[bkLowJ + 3], eq.x[bkLowJ + 3], eq.x[bkLowJ + 3]};
-        for (int square = block + 1; square < n / 4; ++square) {
-            int sqLowI = 4 * square;
+        for (int sqLowI = bkLowJ + 4; sqLowI < n; sqLowI += 4) {
             v4sf x_i = *(v4sf *) (&eq.x[sqLowI]);
 
             v4sf L_0 = *(v4sf *) (&eq.L[sqLowI + n * bkLowJ]);
