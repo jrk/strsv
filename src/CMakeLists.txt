@@ -8,11 +8,8 @@ add_library(solvers SHARED
         solvers.h
         )
 
-target_link_libraries(solvers
-        PRIVATE BLAS::OpenBLAS)
-target_include_directories(solvers
-        PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR})
+target_link_libraries(solvers PRIVATE BLAS::BLAS)
+target_include_directories(solvers PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 set(OPT_FLAGS -march=native)
 foreach (FLAG IN LISTS OPT_FLAGS)

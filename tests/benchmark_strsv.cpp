@@ -1,5 +1,4 @@
 #include "solvers.h"
-#include "LowerTriangularEquation.h"
 
 #include <benchmark/benchmark.h>
 

@@ -22,13 +22,21 @@ FetchContent_MakeAvailable(
 
 ## Projects that are likely available locally / have find modules
 set(BLAS_TARGETS "")
-foreach (BLA_VENDOR IN ITEMS OpenBLAS ATLAS Intel10_64lp_seq Apple Generic)
+set(BLAS_VENDORS Intel10_64lp_seq OpenBLAS Apple Generic)
+foreach (BLA_VENDOR IN LISTS BLAS_VENDORS)
     find_package(BLAS QUIET)
     if (BLAS_FOUND)
         add_library(blas_${BLA_VENDOR} INTERFACE)
         target_link_libraries(blas_${BLA_VENDOR} INTERFACE ${BLAS_LIBRARIES})
+        target_compile_definitions(blas_${BLA_VENDOR} INTERFACE BLA_VENDOR_${BLA_VENDOR})
+
         add_library(BLAS::${BLA_VENDOR} ALIAS blas_${BLA_VENDOR})
         list(APPEND BLAS_TARGETS BLAS::${BLA_VENDOR})
+
+        if (NOT TARGET BLAS::BLAS)
+            add_library(BLAS::BLAS ALIAS blas_${BLA_VENDOR})
+        endif ()
     endif ()
 endforeach ()
 message(STATUS "Found BLAS targets: ${BLAS_TARGETS}")
+

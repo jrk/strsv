@@ -8,7 +8,6 @@ include(GoogleTest)
 add_executable(correctness_strsv correctness_strsv.cpp)
 target_link_libraries(correctness_strsv
         PRIVATE
-        BLAS::OpenBLAS
         solvers
         gtest_main)
 gtest_add_tests(TARGET correctness_strsv)
