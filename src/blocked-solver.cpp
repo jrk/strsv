@@ -25,6 +25,7 @@ void blocked_solver(LowerTriangularEquation &eq) {
         v4sf x_j1 = {eq.x[bkLowJ + 1], eq.x[bkLowJ + 1], eq.x[bkLowJ + 1], eq.x[bkLowJ + 1]};
         v4sf x_j2 = {eq.x[bkLowJ + 2], eq.x[bkLowJ + 2], eq.x[bkLowJ + 2], eq.x[bkLowJ + 2]};
         v4sf x_j3 = {eq.x[bkLowJ + 3], eq.x[bkLowJ + 3], eq.x[bkLowJ + 3], eq.x[bkLowJ + 3]};
+
         for (int sqLowI = bkLowJ + 4; sqLowI < n; sqLowI += 4) {
             v4sf x_i = *(v4sf *) (&eq.x[sqLowI]);
 
