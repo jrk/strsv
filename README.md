@@ -37,3 +37,4 @@ Illustrated in ASCII-art this is:
 and so on.
 
 This matches the performance of OpenBLAS for me.
+You can find the source for STRSV in OpenBLAS [here](https://github.com/xianyi/OpenBLAS/blob/develop/driver/level2/trsv_L.c)
