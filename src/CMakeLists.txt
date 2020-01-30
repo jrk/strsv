@@ -1,11 +1,13 @@
 add_library(solvers SHARED
+        LowerTriangularEquation.cpp
+        LowerTriangularEquation.h
         blas-solver.cpp
         blocked-solver.cpp
+        columnwise-solver.cpp
         naive-solver.cpp
         solvers.cpp
         solvers.h
-        LowerTriangularEquation.cpp
-        LowerTriangularEquation.h)
+        )
 
 target_link_libraries(solvers
         PRIVATE BLAS::OpenBLAS)
