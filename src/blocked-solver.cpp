@@ -1,4 +1,3 @@
-#include <cstring>
 #include "solvers.h"
 
 typedef float v4sf __attribute__ ((vector_size (16), aligned(1)));
@@ -7,14 +6,13 @@ typedef float v4sf __attribute__ ((vector_size (16), aligned(1)));
 void blocked_solver(LowerTriangularEquation &eq) {
     int n = eq.n;
 
-    std::memset(eq.x.data(), 0, n * sizeof(float));
+    std::copy(eq.b.begin(), eq.b.end(), eq.x.begin());
 
     for (int bkLowJ = 0; bkLowJ < n; bkLowJ += 4) {
 
         int trLowI = bkLowJ;
         for (int j = 0; j < 4; ++j) {
             int L_j = bkLowJ + j;
-            eq.x[L_j] += eq.b[L_j];
             for (int i = j + 1; i < 4; ++i) {
                 int L_i = trLowI + i;
                 eq.x[L_i] -= eq.x[L_j] * eq.L[L_i + n * L_j];
