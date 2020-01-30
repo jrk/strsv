@@ -17,7 +17,7 @@ bool relatively_close(const std::vector<float> &correct, const std::vector<float
 }
 
 TEST(SolverTest, AllValuesClose) {
-    auto lte = LowerTriangularEquation::CreateRandom(468);
+    auto lte = LowerTriangularEquation::CreateRandom(472);
 
     blas_solver(lte);
     auto correct_x = lte.x; // copies!
