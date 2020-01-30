@@ -1,4 +1,4 @@
-#include "cblas.h"
+#include <cblas.h>
 #include "solvers.h"
 
 void blas_solver(LowerTriangularEquation &eq) {

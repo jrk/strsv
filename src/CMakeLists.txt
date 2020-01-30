@@ -3,7 +3,6 @@ add_library(solvers SHARED
         LowerTriangularEquation.h
         blas-solver.cpp
         blocked-solver.cpp
-        columnwise-solver.cpp
         naive-solver.cpp
         solvers.cpp
         solvers.h
