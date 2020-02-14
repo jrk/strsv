@@ -16,18 +16,18 @@ void striped_solver(LowerTriangularEquation &eq) {
   for (int bi = 0; bi < nb; ++bi) {
     int di = 4 * bi;
 
-    v4sf x_cur = *(v4sf *)(&x[di]);
+    __m128 x_cur = _mm_loadu_ps(&x[di]);
 
     // leading squares
     for (int bj = 0; bj < bi; ++bj) {
       int dj = 4 * bj;
-      v4sf bx[4];
+      __m128 bx[4];
       for (int k = 0; k < 4; ++k) {
-        bx[k] = (v4sf){eq.x[dj + k], eq.x[dj + k], eq.x[dj + k], eq.x[dj + k]};
+        bx[k] = _mm_broadcast_ss(&x[dj + k]);
       }
-      v4sf Lc[4];
+      __m128 Lc[4];
       for (int k = 0; k < 4; ++k) {
-        Lc[k] = *(v4sf *)(&eq.L[di + n * (dj + k)]);
+        Lc[k] = _mm_loadu_ps(&L[di + n * (dj + k)]);
       }
       for (int k = 0; k < 4; ++k) {
         x_cur -= Lc[k] * bx[k];
@@ -45,7 +45,7 @@ void striped_solver(LowerTriangularEquation &eq) {
       }
     }
 
-    *(v4sf *)(&x[di]) = x_cur;
+    _mm_store_ps(&x[di], x_cur);
   }
 }
 
