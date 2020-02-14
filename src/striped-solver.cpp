@@ -3,7 +3,7 @@
 typedef float v4sf __attribute__((vector_size(16), aligned(1)));
 
 // TODO: for simplicity, assumes n%4=0
-void blocked_solver(LowerTriangularEquation &eq) {
+void striped_solver(LowerTriangularEquation &eq) {
   int n = eq.n;
 
   std::copy(eq.b.begin(), eq.b.end(), eq.x.begin());
@@ -42,4 +42,4 @@ void blocked_solver(LowerTriangularEquation &eq) {
   }
 }
 
-REGISTER_SOLVER(blocked_solver)
+REGISTER_SOLVER(striped_solver)

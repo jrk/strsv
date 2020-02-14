@@ -6,7 +6,7 @@ add_library(solvers SHARED
         naive-solver.cpp
         solvers.cpp
         solvers.h
-        )
+        striped-solver.cpp)
 
 target_link_libraries(solvers PRIVATE BLAS::BLAS)
 target_include_directories(solvers PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
