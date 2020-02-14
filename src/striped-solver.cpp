@@ -17,20 +17,14 @@ void striped_solver(LowerTriangularEquation &eq) {
 
     // leading squares
     for (int dj = 0; dj < di; dj += 4) {
-      __m128 bx[4];
       for (int k = 0; k < 4; ++k) {
-        bx[k] = _mm_broadcast_ss(&x[dj + k]);
-      }
-      __m128 Lc[4];
-      for (int k = 0; k < 4; ++k) {
-        Lc[k] = _mm_loadu_ps(&L[di + n * (dj + k)]);
-      }
-      for (int k = 0; k < 4; ++k) {
-        x_acc -= Lc[k] * bx[k];
+        __m128 bx = _mm_broadcast_ss(&x[dj + k]);
+        __m128 Lc = _mm_loadu_ps(&L[di + n * (dj + k)]);
+        x_acc -= Lc * bx;
       }
     }
 
-    // ending triangle
+    // ending triangle -- slow.
     x_acc[1] -= x_acc[0] * L[di + 1 + n * (di + 0)];
     x_acc[2] -= x_acc[0] * L[di + 2 + n * (di + 0)];
     x_acc[3] -= x_acc[0] * L[di + 3 + n * (di + 0)];
