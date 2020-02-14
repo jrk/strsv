@@ -27,8 +27,8 @@ void striped_solver(LowerTriangularEquation &eq) {
     // ending triangle -- slow.
     x_acc[1] -= x_acc[0] * L[di + 1 + n * (di + 0)];
     x_acc[2] -= x_acc[0] * L[di + 2 + n * (di + 0)];
-    x_acc[3] -= x_acc[0] * L[di + 3 + n * (di + 0)];
     x_acc[2] -= x_acc[1] * L[di + 2 + n * (di + 1)];
+    x_acc[3] -= x_acc[0] * L[di + 3 + n * (di + 0)];
     x_acc[3] -= x_acc[1] * L[di + 3 + n * (di + 1)];
     x_acc[3] -= x_acc[2] * L[di + 3 + n * (di + 2)];
 
