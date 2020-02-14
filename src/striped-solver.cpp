@@ -6,21 +6,17 @@ typedef float v4sf __attribute__((vector_size(16), aligned(1)));
 // TODO: for simplicity, assumes n%4=0
 void striped_solver(LowerTriangularEquation &eq) {
   int n = eq.n;
-  int nb = n / 4;
 
   float *L = eq.L.data();
   float *x = eq.x.data();
 
   std::copy(eq.b.begin(), eq.b.end(), eq.x.begin());
 
-  for (int bi = 0; bi < nb; ++bi) {
-    int di = 4 * bi;
-
-    __m128 x_cur = _mm_loadu_ps(&x[di]);
+  for (int di = 0; di < n; di += 4) {
+    __m128 x_acc = _mm_loadu_ps(&x[di]);
 
     // leading squares
-    for (int bj = 0; bj < bi; ++bj) {
-      int dj = 4 * bj;
+    for (int dj = 0; dj < di; dj += 4) {
       __m128 bx[4];
       for (int k = 0; k < 4; ++k) {
         bx[k] = _mm_broadcast_ss(&x[dj + k]);
@@ -30,22 +26,19 @@ void striped_solver(LowerTriangularEquation &eq) {
         Lc[k] = _mm_loadu_ps(&L[di + n * (dj + k)]);
       }
       for (int k = 0; k < 4; ++k) {
-        x_cur -= Lc[k] * bx[k];
+        x_acc -= Lc[k] * bx[k];
       }
     }
 
     // ending triangle
-    int bj = bi;
-    int dj = 4 * bj;
-    for (int j = 0; j < 4; ++j) {
-      int L_j = dj + j;
-      for (int i = j + 1; i < 4; ++i) {
-        int L_i = di + i;
-        x_cur[i] -= x_cur[j] * L[L_i + n * L_j];
-      }
-    }
+    x_acc[1] -= x_acc[0] * L[di + 1 + n * (di + 0)];
+    x_acc[2] -= x_acc[0] * L[di + 2 + n * (di + 0)];
+    x_acc[3] -= x_acc[0] * L[di + 3 + n * (di + 0)];
+    x_acc[2] -= x_acc[1] * L[di + 2 + n * (di + 1)];
+    x_acc[3] -= x_acc[1] * L[di + 3 + n * (di + 1)];
+    x_acc[3] -= x_acc[2] * L[di + 3 + n * (di + 2)];
 
-    _mm_store_ps(&x[di], x_cur);
+    _mm_store_ps(&x[di], x_acc);
   }
 }
 
