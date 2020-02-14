@@ -1,44 +1,51 @@
 #include "solvers.h"
+#include <immintrin.h>
 
 typedef float v4sf __attribute__((vector_size(16), aligned(1)));
 
 // TODO: for simplicity, assumes n%4=0
 void striped_solver(LowerTriangularEquation &eq) {
   int n = eq.n;
+  int nb = n / 4;
+
+  float *L = eq.L.data();
+  float *x = eq.x.data();
 
   std::copy(eq.b.begin(), eq.b.end(), eq.x.begin());
 
-  for (int bkLowJ = 0; bkLowJ < n; bkLowJ += 4) {
+  for (int bi = 0; bi < nb; ++bi) {
+    int di = 4 * bi;
 
-    int trLowI = bkLowJ;
-    for (int j = 0; j < 4; ++j) {
-      int L_j = bkLowJ + j;
-      for (int i = j + 1; i < 4; ++i) {
-        int L_i = trLowI + i;
-        eq.x[L_i] -= eq.x[L_j] * eq.L[L_i + n * L_j];
+    v4sf x_cur = *(v4sf *)(&x[di]);
+
+    // leading squares
+    for (int bj = 0; bj < bi; ++bj) {
+      int dj = 4 * bj;
+      v4sf bx[4];
+      for (int k = 0; k < 4; ++k) {
+        bx[k] = (v4sf){eq.x[dj + k], eq.x[dj + k], eq.x[dj + k], eq.x[dj + k]};
+      }
+      v4sf Lc[4];
+      for (int k = 0; k < 4; ++k) {
+        Lc[k] = *(v4sf *)(&eq.L[di + n * (dj + k)]);
+      }
+      for (int k = 0; k < 4; ++k) {
+        x_cur -= Lc[k] * bx[k];
       }
     }
 
-    v4sf x_j0 = {eq.x[bkLowJ], eq.x[bkLowJ], eq.x[bkLowJ], eq.x[bkLowJ]};
-    v4sf x_j1 = {eq.x[bkLowJ + 1], eq.x[bkLowJ + 1], eq.x[bkLowJ + 1],
-                 eq.x[bkLowJ + 1]};
-    v4sf x_j2 = {eq.x[bkLowJ + 2], eq.x[bkLowJ + 2], eq.x[bkLowJ + 2],
-                 eq.x[bkLowJ + 2]};
-    v4sf x_j3 = {eq.x[bkLowJ + 3], eq.x[bkLowJ + 3], eq.x[bkLowJ + 3],
-                 eq.x[bkLowJ + 3]};
-
-    for (int sqLowI = bkLowJ + 4; sqLowI < n; sqLowI += 4) {
-      v4sf x_i = *(v4sf *)(&eq.x[sqLowI]);
-
-      v4sf L_0 = *(v4sf *)(&eq.L[sqLowI + n * bkLowJ]);
-      v4sf L_1 = *(v4sf *)(&eq.L[sqLowI + n * (bkLowJ + 1)]);
-      v4sf L_2 = *(v4sf *)(&eq.L[sqLowI + n * (bkLowJ + 2)]);
-      v4sf L_3 = *(v4sf *)(&eq.L[sqLowI + n * (bkLowJ + 3)]);
-
-      x_i -= x_j0 * L_0 + x_j1 * L_1 + x_j2 * L_2 + x_j3 * L_3;
-
-      *(v4sf *)(&eq.x[sqLowI]) = x_i;
+    // ending triangle
+    int bj = bi;
+    int dj = 4 * bj;
+    for (int j = 0; j < 4; ++j) {
+      int L_j = dj + j;
+      for (int i = j + 1; i < 4; ++i) {
+        int L_i = di + i;
+        x_cur[i] -= x_cur[j] * L[L_i + n * L_j];
+      }
     }
+
+    *(v4sf *)(&x[di]) = x_cur;
   }
 }
 
